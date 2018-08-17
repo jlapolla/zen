@@ -6,7 +6,9 @@ Story Part 1
 ============
 
 You wrote a fancy little square root function in Python. You were cute and
-called it ``sqrt()``. Maybe it looks like this.::
+called it ``sqrt()``. Maybe it looks like this.
+
+.. code:: python
 
   def sqrt(x):
 
@@ -14,7 +16,9 @@ called it ``sqrt()``. Maybe it looks like this.::
       # ...
       return result
 
-You're thinking ahead now, and you add a check to make sure ``x >= 0``.::
+You're thinking ahead now, and you add a check to make sure ``x >= 0``.
+
+.. code:: python
 
   def sqrt(x):
 
@@ -40,7 +44,9 @@ team:
 > Thanks!
 > - Octavius
 
-You open the code in the email attachment.::
+You open the code in the email attachment.
+
+.. code:: python
 
   def frobnicate(nm, count):
       # Some frobnicating code here!
@@ -59,7 +65,9 @@ You open the code in the email attachment.::
 
 Hmm, they passed a string to your beautiful ``sqrt()`` function. Well, time to
 protect those overseas developers from themselves again. You add another check
-to your ``sqrt()`` function.::
+to your ``sqrt()`` function.
+
+.. code:: python
 
   def sqrt(x):
 
@@ -85,7 +93,7 @@ You commit your code and send a reply to Octavius.
 
 You go home, and sleep.
 
-The next day, you have an email. It's Octavius again.::
+The next day, you have an email. It's Octavius again.
 
 > Hi James,
 >
@@ -96,7 +104,9 @@ The next day, you have an email. It's Octavius again.::
 > - Octavius
 
 You wonder what could possibly go wrong with your beautiful ``sqrt()``
-function. You open the code in the email attachment.::
+function. You open the code in the email attachment.
+
+.. code:: python
 
   def barriza(arr):
       # Some barizza code here!
@@ -115,7 +125,9 @@ function. You open the code in the email attachment.::
 
 Hmm, Octavius passed a list of numbers to ``sqrt()``. I suppose he was expecting
 it to return a list of the square roots of each number? Well, I guess that's
-kind of reasonable. Well, let's update ``sqrt()`` to handle lists.::
+kind of reasonable. Well, let's update ``sqrt()`` to handle lists.
+
+.. code:: python
 
   def sqrt(x):
 
@@ -150,7 +162,9 @@ another email. You grumble to yourself "Better not be Octavius again."
 > - Octavius
 
 Holy #*$%!, Octavius, what could it possibly be now!? You open the email
-attachment.::
+attachment.
+
+.. code:: python
 
   def floopteedoo(arr):
       # Some floopteedoo code here!
@@ -178,7 +192,9 @@ what the #*$%! does he expect ``sqrt()`` to return for this argument!?
 You think about how you could add a case to ``sqrt()`` to track a set of arrays
 you've already visited to detect and break the cycle. But this has gone too far.
 It's time to put your foot down! You add some preconditions to ``sqrt()`` in the
-comments.::
+comments.
+
+.. code:: python
 
   # Square root of 'x'.
   #
@@ -245,7 +261,9 @@ That should be safe since it now says in the preconditions that ``x`` cannot be
 a string. What could possibly go wrong with that change?
 
 The thought crosses your mind to ignore Octavius entirely and get some useful
-work done. You open the attachment anyway.::
+work done. You open the attachment anyway.
+
+.. code:: python
 
   def raise_exception():
       sqrt("Bob")
@@ -280,7 +298,9 @@ then Octavius himself hits you with this gem of a sentence.
 > feature, and our tests broke. Can you bring the exception back, please?
 
 "I never said that in the specification!" you bark back. But they insist. You
-look back in the commit history, and lo and behold, there it is.::
+look back in the commit history, and lo and behold, there it is.
+
+.. code:: python
 
   # Square root of 'x'.
   #
