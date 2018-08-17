@@ -36,13 +36,13 @@ night's sleep.
 The next day you waltz into work and find an email from the overseas development
 team:
 
-> Hi James,
->
-> I tried your sqrt() function and it didn't do what I expected. Please take a
-> look at my code and try it.
-> 
-> Thanks!
-> - Octavius
+  Hi James,
+
+  I tried your sqrt() function and it didn't do what I expected. Please take a
+  look at my code and try it.
+
+  Thanks!
+  - Octavius
 
 You open the code in the email attachment.
 
@@ -83,25 +83,25 @@ to your ``sqrt()`` function.
 
 You commit your code and send a reply to Octavius.
 
-> Hi Octavius,
->
-> I took a look, and it looks like you're passing a string to sqrt(). You're not
-> supposed to do that. I made it raise an exception in this case.
->
-> Hope that works for you!
-> - James
+  Hi Octavius,
+
+  I took a look, and it looks like you're passing a string to sqrt(). You're not
+  supposed to do that. I made it raise an exception in this case.
+
+  Hope that works for you!
+  - James
 
 You go home, and sleep.
 
 The next day, you have an email. It's Octavius again.
 
-> Hi James,
->
-> Thanks for that fix yesterday. I have a new problem now though. Please take a
-> look at the attachment.
-> 
-> Thanks!
-> - Octavius
+  Hi James,
+
+  Thanks for that fix yesterday. I have a new problem now though. Please take a
+  look at the attachment.
+
+  Thanks!
+  - Octavius
 
 You wonder what could possibly go wrong with your beautiful ``sqrt()``
 function. You open the code in the email attachment.
@@ -152,14 +152,14 @@ The next morning you come in ready to work on another function. But you have
 another email. You grumble to yourself "Better not be Octavius again."
 
 
-> Hi James,
->
-> That sqrt() list feature you put in yesterday is really killer! Thanks! But
-> for some reason it crashes in the attached file. The backtrace says it crashes
-> in your sqrt() function. Please take a look!
->
-> Thanks!
-> - Octavius
+  Hi James,
+
+  That sqrt() list feature you put in yesterday is really killer! Thanks! But
+  for some reason it crashes in the attached file. The backtrace says it crashes
+  in your sqrt() function. Please take a look!
+
+  Thanks!
+  - Octavius
 
 Holy #*$%!, Octavius, what could it possibly be now!? You open the email
 attachment.
@@ -230,9 +230,9 @@ proof. You think to yourself "Try to break my sqrt() now, Octavius!"
 
 You send a nastygram to Octavius.
 
-> Octavius,
->
-> Please obey the preconditions.
+  Octavius,
+
+  Please obey the preconditions.
 
 You go home a little annoyed. The next morning you come in to work... and there
 is not an email waiting for you. Thank God. You move on to some other code that
@@ -248,13 +248,13 @@ Friday morning now. It's going to be a productive day.
 
 You innocently peruse your email before you get started on "real work".
 
-> Hey James,
->
-> I noticed you changed sqrt() a few days ago, and it broke some of our tests.
-> Can you please get the attached code working again?
->
-> Thanks
-> - Octavius
+  Hey James,
+
+  I noticed you changed sqrt() a few days ago, and it broke some of our tests.
+  Can you please get the attached code working again?
+
+  Thanks
+  - Octavius
 
 You recall a few days ago that you removed the check for ``isinstance(x, str)``.
 That should be safe since it now says in the preconditions that ``x`` cannot be
@@ -289,13 +289,13 @@ conversation might go in your head. You thought you had thought of all the
 possible idiotic things they might say, and how you could set them straight. But
 then Octavius himself hits you with this gem of a sentence.
 
-> Octavius:
->
-> So, in your specification for sqrt(), we noticed it said that if we pass a
-> string to sqrt(), it raises an exception. We wanted to reuse that code to
-> raise exceptions when we kaloobanitize the dinosaurs. So, we used sqrt("Bob")
-> to do that. Then suddenly, you stopped supporting that exception raising
-> feature, and our tests broke. Can you bring the exception back, please?
+  Octavius:
+
+  So, in your specification for sqrt(), we noticed it said that if we pass a
+  string to sqrt(), it raises an exception. We wanted to reuse that code to
+  raise exceptions when we kaloobanitize the dinosaurs. So, we used sqrt("Bob")
+  to do that. Then suddenly, you stopped supporting that exception raising
+  feature, and our tests broke. Can you bring the exception back, please?
 
 "I never said that in the specification!" you bark back. But they insist. You
 look back in the commit history, and lo and behold, there it is.
@@ -319,34 +319,34 @@ look back in the commit history, and lo and behold, there it is.
   def sqrt(x):
       ...
 
-> You:
->
-> Okay, well I thought it was obvious that throwing the exception wasn't
-> supposed to be a "feature" that you should use.
->
-> Octavius:
->
-> What do you mean? Obvious? It's in the specification that sqrt() raises an
-> exception if we pass a string. We thought that was a feature. How were we
-> supposed to know!?
->
-> You:
->
-> Look, I'm sorry, but that wasn't supposed to be a feature. You guys are
-> going to have to change your code.
->
-> Octavius:
->
-> Now hold on a sec. Are you telling me you aren't supporting backwards
-> compatibility when you update sqrt()? Well if that's the case, then what
-> features CAN we depend on!?
->
-> You:
->
-> Look, guys, I'm sorry. Really. It's my bad. I should have communicated better.
-> But you have to understand, that's not a feature that sqrt() supports. I'll
-> comb through the specification again, and make sure this doesn't happen again.
-> Okay?
+You:
+
+  Okay, well I thought it was obvious that throwing the exception wasn't
+  supposed to be a "feature" that you should use.
+
+Octavius:
+
+  What do you mean? Obvious? It's in the specification that sqrt() raises an
+  exception if we pass a string. We thought that was a feature. How were we
+  supposed to know!?
+
+You:
+
+  Look, I'm sorry, but that wasn't supposed to be a feature. You guys are
+  going to have to change your code.
+
+Octavius:
+
+  Now hold on a sec. Are you telling me you aren't supporting backwards
+  compatibility when you update sqrt()? Well if that's the case, then what
+  features CAN we depend on!?
+
+You:
+
+  Look, guys, I'm sorry. Really. It's my bad. I should have communicated better.
+  But you have to understand, that's not a feature that sqrt() supports. I'll
+  comb through the specification again, and make sure this doesn't happen again.
+  Okay?
 
 Octavius gripes that that's not really a thorough answer, and the overseas team
 is still unsure what aspects of ``sqrt()`` specification are features and what
