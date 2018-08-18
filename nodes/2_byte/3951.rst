@@ -398,13 +398,29 @@ your new square root library. You start on the ``floopteedoo()`` function.
       return result
 
 You review your code carefully. Then you realize that by the time you call
-``checked_sqrt()``, you have already verified that ``x`` is an integer. Also,
-because of the condition in the while loop, you know that ``x`` is non-negative
-when you call ``checked_sqrt()``.
+``checked_sqrt()``, you have already verified that ``x`` is an integer. You know
+that ``checked_sqrt()`` is going to check the type of ``x`` again, you know that
+the check is redundant, and you want your code to run just a bit faster. So, you
+change it to call ``sqrt_int()`` directly, instead of calling
+``checked_sqrt()``.
 
-However, you know that ``checked_sqrt()`` is going to perform these checks
-**again**, and you want your code to be fast. So, you skip the extra
-``checked_sqrt()`` checks entirely, and just call ``sqrt()`` directly.
+.. code:: python
+
+  def floopteedoo(x):
+      if not (isinstance(x, int)):
+          raise Exception('not an int')
+      result = []
+      while x > 0:
+          result.append(sqrt_int(x))
+          x -= 1
+      return result
+
+Then, you notice something else: because of the condition in the while loop, you
+know that ``x`` is non-negative when you call ``sqrt_int()``. You also know that
+``sqrt_int()`` is going to check if ``x`` is non-negative, and then pass it to
+``sqrt()``. So, why not skip the extra non-negative check, and pass ``x``
+directly to ``sqrt()``? You update your code to call ``sqrt()`` directly instead
+of calling ``sqrt_int()``.
 
 .. code:: python
 
@@ -425,13 +441,19 @@ these functions uses some features from your new square root library.
 is negligible because the checks that ``checked_sqrt()`` performs are fast.
 However, there are cases where the cost of an extra check is substantial.
 Consider a function that takes a directed acyclic graph, ``topo_order(g)``, and
-the checked version ``checked_topo_order(g)`` that checks ``graph.has_cycles()``
+the checked version ``checked_topo_order(g)`` that checks ``g.has_cycles()``
 before calling down to ``topo_order(g)``. If ``g`` is a graph without cycles,
 performing the cycle check will visit every node and edge in the graph, a very
 expensive operation. Therefore, you want to do the cycle check _ONLY ONCE_, and
 skip subsequent checks. So, if you already have a graph that you know has no
 cycles, you want to call ``topo_order(g)`` directly, instead of calling
 ``checked_topo_order(g)``. Otherwise your performance will suffer.*
+
+*Aside: In a large application, call stacks can be hundreds or thousands of
+function calls deep. If each function checks the type of ``x`` before passing it
+to the next function, the performance impact can really add up. Now, apply that
+same reasoning to our ``topo_order(g)`` example; you certainly don't want to
+call ``g.has_cycles()`` thousands of times.*
 
 Code coverage
 =============
