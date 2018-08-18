@@ -434,33 +434,33 @@ of calling ``sqrt_int()``.
       return result
 
 You continue with writing your the other functions you need to implement your
-new feature: ``bangarang()``, ``hollybar()``, and ``umbilicate()``. Each of
+new feature: ``dingarang()``, ``hollybar()``, and ``umbilicate()``. Each of
 these functions uses some features from your new square root library.
 
-*Aside: In this case, the performance benefit from calling ``sqrt()`` directly
+*Aside:* In this case, the performance benefit from calling ``sqrt()`` directly
 is negligible because the checks that ``checked_sqrt()`` performs are fast.
 However, there are cases where the cost of an extra check is substantial.
 Consider a function that takes a directed acyclic graph, ``topo_order(g)``, and
 the checked version ``checked_topo_order(g)`` that checks ``g.has_cycles()``
 before calling down to ``topo_order(g)``. If ``g`` is a graph without cycles,
 performing the cycle check will visit every node and edge in the graph, a very
-expensive operation. Therefore, you want to do the cycle check ONLY ONCE, and
-skip subsequent checks. So, if you already have a graph that you know has no
+expensive operation. Therefore, you want to do the cycle check **ONLY ONCE**,
+and skip subsequent checks. So, if you already have a graph that you know has no
 cycles, you want to call ``topo_order(g)`` directly, instead of calling
-``checked_topo_order(g)``. Otherwise your performance will suffer.*
+``checked_topo_order(g)``. Otherwise your performance will suffer.
 
-*Aside: In a large application, call stacks can be hundreds or thousands of
+*Aside:* In a large application, call stacks can be hundreds or thousands of
 function calls deep. If each function checks the type of ``x`` before passing it
 to the next function, the performance impact can really add up. Now, apply that
 same reasoning to our ``topo_order(g)`` example; you certainly don't want to
-call ``g.has_cycles()`` thousands of times.*
+call ``g.has_cycles()`` thousands of times.
 
 Code coverage
 =============
 
 **UNDER CONSTRUCTION**
 
-*Aside: Consider this: where is the value-added in our square root library? The
+*Aside:* Consider this: where is the value-added in our square root library? The
 value-added is in the "fancy square root" algorithm. The special case functions
 like ``sqrt_list()`` and ``sqrt_str()`` are all very small and very simple.
 These special case functions are performing checks and doing things that client
@@ -468,9 +468,9 @@ code can easily check and do itself. In fact, in most cases, the client code is
 already performing these checks itself. Is it worth your time to write these
 special-case functions? The client code could easily do without them. Why not
 spend more time on your actual value added: spend time improving the "fancy
-square root" algorithm. Or move on to implement another needed feature!*
+square root" algorithm. Or move on to implement another needed feature!
 
-*Aside: If the performance arguments against defensive programming don't
+*Aside:* If the performance arguments against defensive programming don't
 convince you, then perhaps the maintainability arguments will. Look how much
 special-case code we were able to remove by restricting the preconditions of
-``sqrt()``!*
+``sqrt()``!
