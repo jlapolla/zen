@@ -1,1 +1,1 @@
-../nodes/2_byte/24D0
+../nodes/2_byte/24D0.rst
