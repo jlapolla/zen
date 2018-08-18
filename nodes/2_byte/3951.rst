@@ -444,7 +444,7 @@ Consider a function that takes a directed acyclic graph, ``topo_order(g)``, and
 the checked version ``checked_topo_order(g)`` that checks ``g.has_cycles()``
 before calling down to ``topo_order(g)``. If ``g`` is a graph without cycles,
 performing the cycle check will visit every node and edge in the graph, a very
-expensive operation. Therefore, you want to do the cycle check _ONLY ONCE_, and
+expensive operation. Therefore, you want to do the cycle check ONLY ONCE, and
 skip subsequent checks. So, if you already have a graph that you know has no
 cycles, you want to call ``topo_order(g)`` directly, instead of calling
 ``checked_topo_order(g)``. Otherwise your performance will suffer.*
@@ -459,3 +459,18 @@ Code coverage
 =============
 
 **UNDER CONSTRUCTION**
+
+*Aside: Consider this: where is the value-added in our square root library? The
+value-added is in the "fancy square root" algorithm. The special case functions
+like ``sqrt_list()`` and ``sqrt_str()`` are all very small and very simple.
+These special case functions are performing checks and doing things that client
+code can easily check and do itself. In fact, in most cases, the client code is
+already performing these checks itself. Is it worth your time to write these
+special-case functions? The client code could easily do without them. Why not
+spend more time on your actual value added: spend time improving the "fancy
+square root" algorithm. Or move on to implement another needed feature!*
+
+*Aside: If the performance arguments against defensive programming don't
+convince you, then perhaps the maintainability arguments will. Look how much
+special-case code we were able to remove by restricting the preconditions of
+``sqrt()``!*
