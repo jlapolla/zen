@@ -182,3 +182,60 @@ Next, we'll separate the type detection from the action performed on each type.
       # Fancy square root code here!
       # ...
       return result
+
+It seems odd that there's a ``sqrt_list()`` and a ``sqrt_str()``, but there's no
+``sqrt_int()`` or ``sqrt_float()``. For the sake of symmetry, we'll refactor to
+introduce ``sqrt_int()`` and ``sqrt_float()``.
+
+.. code:: python
+
+  # Python code.
+
+  def checked_sqrt(x):
+
+      if isinstance(x, list):
+          return sqrt_list(x)
+
+      if isinstance(x, str):
+          return sqrt_str(x)
+
+      if isinstance(x, int):
+          return sqrt_int(x)
+
+      if isinstance(x, float):
+          return sqrt_float(x)
+
+      raise Exception('unhandled type')
+
+  def sqrt_list(x):
+      return map(checked_sqrt, x)
+
+  def sqrt_str(x):
+      return sqrt_float(float(x))
+
+  def sqrt_int(x):
+      if x < 0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+  def sqrt_float(x):
+      if x < 0.0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+  def sqrt(x):
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+Look at that beautiful symmetry. Now the separation of responsibilities is
+clear.
+
+- ``checked_sqrt()`` checks the type of ``x``, and dispatches to the associated
+  function.
+- ``sqrt_list()`` handles ``list`` type arguments.
+- ``sqrt_str()`` handles ``str`` type arguments.
+- ``sqrt_int()`` handles ``int`` type arguments.
+- ``sqrt_float()`` handles ``float`` type arguments.
+- ``sqrt()`` does the actual fancy square root code.
