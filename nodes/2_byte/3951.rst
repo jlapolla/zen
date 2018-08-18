@@ -2,8 +2,8 @@
 Fixing defensive programming antipatterns
 =========================================
 
-Pretend your name is James, and you're a proponent of defensive programming. You
-probably write code like this:
+Pretend your name is Brutus, and you're a proponent of defensive programming.
+You probably write code like this:
 
 .. code:: python
 
@@ -54,7 +54,7 @@ if ``x`` was a number. "What if I pass a boolean?" he asks. He has a point.
       # ...
       return result
 
-You're pleased with yourself. Octavius raises his hand again: "James, what if I
+You're pleased with yourself. Octavius raises his hand again: "Brutus, what if I
 pass a list of numbers?" he asks. You think about what should happen if client
 code passes a list to ``sqrt()``. "Well, if the client passes a list of numbers,
 I suppose I should return a list of their square roots" you reply. You add
@@ -244,7 +244,7 @@ clear.
 Octavius strikes back
 =====================
 
-In your next code review, Octavius isn't happy. He says, "James, now I can't
+In your next code review, Octavius isn't happy. He says, "Brutus, now I can't
 pass a string to ``sqrt()``." You reply, "If you want to pass a string, use
 ``sqrt_str()``."
 
