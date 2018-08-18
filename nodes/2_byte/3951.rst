@@ -238,4 +238,4 @@ clear.
 - ``sqrt_str()`` handles ``str`` type arguments.
 - ``sqrt_int()`` handles ``int`` type arguments.
 - ``sqrt_float()`` handles ``float`` type arguments.
-- ``sqrt()`` does the actual fancy square root code.
+- ``sqrt()`` does the actual "fancy square root" algorithm.
