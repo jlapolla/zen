@@ -383,4 +383,57 @@ least check that ``x`` is not negative in ``sqrt()``?" he asks. You concede.
 Using your code
 ===============
 
-TODO
+With ``sqrt()`` and friends out of the way, you start writing functions that use
+your new square root library. You start on the ``floopteedoo()`` function.
+
+.. code:: python
+
+  def floopteedoo(x):
+      if not (isinstance(x, int)):
+          raise Exception('not an int')
+      result = []
+      while x > 0:
+          result.append(checked_sqrt(x))
+          x -= 1
+      return result
+
+You review your code carefully. Then you realize that by the time you call
+``checked_sqrt()``, you have already verified that ``x`` is an integer. Also,
+because of the condition in the while loop, you know that ``x`` is non-negative
+when you call ``checked_sqrt()``.
+
+However, you know that ``checked_sqrt()`` is going to perform these checks
+**again**, and you want your code to be fast. So, you skip the extra
+``checked_sqrt()`` checks entirely, and just call ``sqrt()`` directly.
+
+.. code:: python
+
+  def floopteedoo(x):
+      if not (isinstance(x, int)):
+          raise Exception('not an int')
+      result = []
+      while x > 0:
+          result.append(sqrt(x))
+          x -= 1
+      return result
+
+You continue with writing your the other functions you need to implement your
+new feature: ``bangarang()``, ``hollybar()``, and ``umbilicate()``. Each of
+these functions uses some features from your new square root library.
+
+*Aside: In this case, the performance benefit from calling ``sqrt()`` directly
+is negligible because the checks that ``checked_sqrt()`` performs are fast.
+However, there are cases where the cost of an extra check is substantial.
+Consider a function that takes a directed acyclic graph, ``topo_order(g)``, and
+the checked version ``checked_topo_order(g)`` that checks ``graph.has_cycles()``
+before calling down to ``topo_order(g)``. If ``g`` is a graph without cycles,
+performing the cycle check will visit every node and edge in the graph, a very
+expensive operation. Therefore, you want to do the cycle check _ONLY ONCE_, and
+skip subsequent checks. So, if you already have a graph that you know has no
+cycles, you want to call ``topo_order(g)`` directly, instead of calling
+``checked_topo_order(g)``. Otherwise your performance will suffer.*
+
+Code coverage
+=============
+
+**UNDER CONSTRUCTION**
