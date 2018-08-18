@@ -1,0 +1,167 @@
+=========================================
+Fixing defensive programming antipatterns
+=========================================
+
+Pretend your name is James, and you're a proponent of defensive programming. You
+probably write code like this:
+
+.. code:: python
+
+  # Python code.
+
+  def sqrt(x):
+
+      if x < 0:
+          raise Exception('domain error')
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+During a code review, your coworker, Octavius, points out that you didn't check
+if ``x`` was a number. "What if I pass a string?" he asks. He has a point.
+"Okay, let me update ``sqrt()``" you reply.
+
+.. code:: python
+
+  # Python code.
+
+  def sqrt(x):
+
+      if not (isinstance(x, int) or isinstance(x, float)):
+          raise Exception('not a number')
+
+      if x < 0:
+          raise Exception('domain error')
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+You're pleased with yourself. Octavius raises his hand again: "James, what if I
+pass a list of numbers?" he asks. You think about what should happen if client
+code passes a list to ``sqrt()``. "Well, if the client passes a list of numbers,
+I suppose I should return a list of their square roots" you reply.
+
+.. code:: python
+
+  # Python code.
+
+  def sqrt(x):
+
+      if isinstance(x, list):
+          return map(sqrt, x)
+
+      if not (isinstance(x, int) or isinstance(x, float)):
+          raise Exception('not a number')
+
+      if x < 0:
+          raise Exception('domain error')
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+You're pleaed with yourself again. But Octavius raises his hand again: "What if
+I pass a string?" You consider it for a moment, and reply "Well, I suppose I
+could try to convert it to a number."
+
+.. code:: python
+
+  # Python code.
+
+  def sqrt(x):
+
+      if isinstance(x, list):
+          return map(sqrt, x)
+
+      if isinstance(x, str):
+          return sqrt(float(x))
+
+      if not (isinstance(x, int) or isinstance(x, float)):
+          raise Exception('not a number')
+
+      if x < 0:
+          raise Exception('domain error')
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+Finally, Octavius is satisfied. ``sqrt()`` rejects all inputs that are not
+numbers, unless the input is a list, in which case it applies ``sqrt()`` to
+every member of the list. Or if the input is a string, it converts it to a
+number, and applies ``sqrt()``. It seems bullet proof. It even has the added
+benefit that it will handle a list of strings!
+
+Separating responsibilities
+===========================
+
+Now I'm going to propose that we make ``sqrt()`` even more modular. Let's
+decompose it into a suite of related functions. Our goal is to give each
+function a single responsibility. That way, our code follows the `single
+responsibility principle`_.
+
+.. _`single responsibility principle`: https://en.wikipedia.org/wiki/Single_responsibility_principle
+
+As a first step, we pull out the argument checks into a separate function.
+
+.. code:: python
+
+  # Python code.
+
+  def checked_sqrt(x):
+
+      if isinstance(x, list):
+          return map(checked_sqrt, x)
+
+      if isinstance(x, str):
+          return checked_sqrt(float(x))
+
+      if not (isinstance(x, int) or isinstance(x, float)):
+          raise Exception('not a number')
+
+      if x < 0:
+          raise Exception('domain error')
+
+      return sqrt(x)
+
+  def sqrt(x):
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+Next, we'll separate the type detection from the action performed on each type.
+
+.. code:: python
+
+  # Python code.
+
+  def checked_sqrt(x):
+
+      if isinstance(x, list):
+          return sqrt_list(x)
+
+      if isinstance(x, str):
+          return sqrt_str(x)
+
+      if not (isinstance(x, int) or isinstance(x, float)):
+          raise Exception('not a number')
+
+      if x < 0:
+          raise Exception('domain error')
+
+      return sqrt(x)
+
+  def sqrt_list(x):
+      return map(checked_sqrt, x)
+
+  def sqrt_str(x):
+      return checked_sqrt(float(x))
+
+  def sqrt(x):
+
+      # Fancy square root code here!
+      # ...
+      return result
