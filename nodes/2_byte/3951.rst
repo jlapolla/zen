@@ -453,7 +453,7 @@ cycles, you want to call ``topo_order(g)`` directly, instead of calling
 function calls deep. If each function checks the type of ``x`` before passing it
 to the next function, the performance impact can really add up. Now, apply that
 same reasoning to our ``topo_order(g)`` example; you certainly don't want to
-call ``g.has_cycles()`` thousands of times.
+call ``g.has_cycles()`` thousands of times!
 
 Code coverage
 =============
@@ -473,4 +473,4 @@ square root" algorithm. Or move on to implement another needed feature!
 *Aside:* If the performance arguments against defensive programming don't
 convince you, then perhaps the maintainability arguments will. Look how much
 special-case code we were able to remove by restricting the preconditions of
-``sqrt()``!
+``sqrt()``! Consider how many fewer tests we need to write!
