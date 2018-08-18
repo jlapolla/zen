@@ -22,6 +22,22 @@ During a code review, your coworker, Octavius, points out that you didn't check
 if ``x`` was a number. "What if I pass a boolean?" he asks. He has a point.
 "Okay, let me update ``sqrt()``" you reply.
 
+.. code:: diff
+
+   # Diff.
+
+   def sqrt(x):
+
+  +    if not (isinstance(x, int) or isinstance(x, float)):
+  +        raise Exception('not a number')
+  +
+       if x < 0:
+           raise Exception('domain error')
+
+       # Fancy square root code here!
+       # ...
+       return result
+
 .. code:: python
 
   # Python code.
