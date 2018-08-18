@@ -121,7 +121,8 @@ responsibility principle`_.
 
 .. _`single responsibility principle`: https://en.wikipedia.org/wiki/Single_responsibility_principle
 
-As a first step, we pull out the argument checks into a separate function.
+As a first step, we'll separate the argument checks from the "fancy square root"
+algorithm.
 
 .. code:: python
 
@@ -239,3 +240,147 @@ clear.
 - ``sqrt_int()`` handles ``int`` type arguments.
 - ``sqrt_float()`` handles ``float`` type arguments.
 - ``sqrt()`` does the actual "fancy square root" algorithm.
+
+Octavius strikes back
+=====================
+
+In your next code review, Octavius isn't happy. He says, "James, now I can't
+pass a string to ``sqrt()``." You reply, "If you want to pass a string, use
+``sqrt_str()``."
+
+"But what if I want to pass a variable without worrying about its type?" he
+whines. You reply, "Use ``checked_sqrt()`` for that. It will take any type of
+argument."
+
+"But what if I want to pass a boolean and have it interpreted as zero or one?"
+he insists. A little annoyed, you reply "Octavius, why would you want to take
+the square root of zero or one. You already know that the square root of zero is
+zero and the square root of one is one. If you really want, I can make a
+``sqrt_bool()`` function that returns ``1`` for ``True`` and ``0`` for
+``False``. But what's the point?"
+
+"Well, okay" he says. "But, would you please at least document the preconditions
+of your functions. I don't want to end up accidentally passing a list to
+``sqrt_int()`` or a string to ``sqrt_list()``." You think about this a moment.
+"I guess I could document the preconditions of each function. I had thought it
+was obvious and easy to remember what type of arguments you can pass to each
+function since the function is named after the type of the argument. Do you
+really need this documented to use these functions correctly?"
+
+Octavius says, "Well, I guess that's true for most of the functions. And
+``checked_sqrt()`` will accept any argument type, so I'm not worried about that
+one. But ``sqrt()`` doesn't have the argument type in its name. Can you just
+document the preconditions for ``sqrt()`` so I don't call it with the wrong
+arguments?"
+
+This sounds reasonable to you. You update your code.
+
+.. code:: python
+
+  # Python code.
+
+  def checked_sqrt(x):
+
+      if isinstance(x, list):
+          return sqrt_list(x)
+
+      if isinstance(x, str):
+          return sqrt_str(x)
+
+      if isinstance(x, int):
+          return sqrt_int(x)
+
+      if isinstance(x, float):
+          return sqrt_float(x)
+
+      raise Exception('unhandled type')
+
+  def sqrt_list(x):
+      return map(checked_sqrt, x)
+
+  def sqrt_str(x):
+      return sqrt_float(float(x))
+
+  def sqrt_int(x):
+      if x < 0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+  def sqrt_float(x):
+      if x < 0.0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+  def sqrt(x):
+
+      """Apply the "fancy square root" algorithm to 'x'.
+
+      Preconditions:
+      - 'x' is a number.
+      - 'x' is greater than or equal to zero.
+      """
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+Octavius is reasonably happy with this. "One more request," he adds. "Can you at
+least check that ``x`` is not negative in ``sqrt()``?" he asks. You concede.
+"Okay, Octavius" you say. You change the code again.
+
+.. code:: python
+
+  # Python code.
+
+  def checked_sqrt(x):
+
+      if isinstance(x, list):
+          return sqrt_list(x)
+
+      if isinstance(x, str):
+          return sqrt_str(x)
+
+      if isinstance(x, int):
+          return sqrt_int(x)
+
+      if isinstance(x, float):
+          return sqrt_float(x)
+
+      raise Exception('unhandled type')
+
+  def sqrt_list(x):
+      return map(checked_sqrt, x)
+
+  def sqrt_str(x):
+      return sqrt_float(float(x))
+
+  def sqrt_int(x):
+      if x < 0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+  def sqrt_float(x):
+      if x < 0.0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+  def sqrt(x):
+
+      """Apply the "fancy square root" algorithm to 'x'.
+
+      Preconditions:
+      - 'x' is a number.
+      - 'x' is greater than or equal to zero.
+      """
+
+      if x < 0.0:
+          raise Exception('domain error')
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+Using your code
+===============
+
+TODO
