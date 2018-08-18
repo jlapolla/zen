@@ -19,7 +19,7 @@ probably write code like this:
       return result
 
 During a code review, your coworker, Octavius, points out that you didn't check
-if ``x`` was a number. "What if I pass a string?" he asks. He has a point.
+if ``x`` was a number. "What if I pass a boolean?" he asks. He has a point.
 "Okay, let me update ``sqrt()``" you reply.
 
 .. code:: python
@@ -41,7 +41,8 @@ if ``x`` was a number. "What if I pass a string?" he asks. He has a point.
 You're pleased with yourself. Octavius raises his hand again: "James, what if I
 pass a list of numbers?" he asks. You think about what should happen if client
 code passes a list to ``sqrt()``. "Well, if the client passes a list of numbers,
-I suppose I should return a list of their square roots" you reply.
+I suppose I should return a list of their square roots" you reply. You add
+another check to ``sqrt()``.
 
 .. code:: python
 
@@ -62,7 +63,7 @@ I suppose I should return a list of their square roots" you reply.
       # ...
       return result
 
-You're pleaed with yourself again. But Octavius raises his hand again: "What if
+You're pleased with yourself again. But Octavius raises his hand again: "What if
 I pass a string?" You consider it for a moment, and reply "Well, I suppose I
 could try to convert it to a number."
 
