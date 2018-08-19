@@ -530,7 +530,7 @@ future.
 Now you have two options before you:
 
 - Alter the preconditions of ``sqrt()`` to make ``sqrt(-1)`` a valid call, with
-  a well-defined behavior and supporting tests.
+  a well-defined, documented behavior and supporting tests.
 - Remove the test for ``sqrt(-1)``.
 
 You think it's silly to make ``sqrt(-1)`` an officially supported feature, so
@@ -559,11 +559,11 @@ But you still have the code coverage issue.
 
 You ponder this for a while. Slowly and carefully, you conclude: "I guess,
 because of the way I've defined the preconditions, checking for ``x`` less than
-zero and raising an exception is actually dead code. And since it's dead code,
-I should remove it entirely. That code will never be executed if the client
-code is well-formed. And if the client code is ill-formed and does something
-like ``sqrt(-1)``, that's unsupported behavior, and it represents a bug in the
-client code."
+zero and raising an exception is actually dead code. That code will never be
+executed if the client code is well-formed. And if the client code is ill-formed
+and does something like ``sqrt(-1)``, that's unsupported behavior, and it
+represents a bug in the client code. Since the precondition check is effectively
+dead code, I should remove it entirely."
 
 It doesn't feel right to you. You've been taught all your life that defensive
 programming is a gift from heaven. But you've run into this test coverage /
@@ -706,10 +706,10 @@ new feature."
 "But what if I need to use your square root library to take the square root of
 a list of numbers?" he insists.
 
-"Well, if you have a list of numbers ``l``, you can do that with ``map(sqrt,
-l)``. I thought that was easy enough to type into your keyboard. Are you unable
-to do that in your code? Or do I need to make a special case function for you?"
-you quip.
+"Well, if you have a list of numbers ``num_list``, you can do that with
+``map(sqrt, num_list)``. I thought that was easy enough to type into your
+keyboard. Are you unable to do that in your code? Or do I need to make a special
+case function for you?" you quip.
 
 Octavius is visibly annoyed. He contains himself. Slowly, he gathers his
 composure. At length he sighs. "You have a point" he says in a level tone.
@@ -731,7 +731,7 @@ Actually, the code is still hanging. You hit ``Ctrl`` + ``C`` to interrupt it.
 The backtrace shows that ``sqrt()`` was stuck in one of its inner loops within
 the "fancy square root" algorithm.
 
-"Looks like it loops forever" you say.
+"Looks like it loops forever when you call ``sqrt(-1)``" you say.
 
 "And you find that behavior acceptable!?" cries Octavius.
 
@@ -763,9 +763,9 @@ loop, and you'll hit ``Ctrl`` + ``C`` to interrupt the test, get the backtrace,
 and debug the problem from there" you reply. Then you add "Regardless of what
 happens when you violate my preconditions, if you do your part and test your
 feature thoroughly, you will notice that something is wrong during testing, and
-you fix your code to call ``sqrt()`` properly. Therefore, such a precondition
-violation will never make it into production code as long as you test your
-feature properly."
+you will fix your code to call ``sqrt()`` properly. Therefore, such a
+precondition violation will never make it into production code as long as you
+test **YOUR** feature properly."
 
 "Basically, what you're saying is we should rely on tests to catch these cases.
 I suppose that's true" says Octavius. "Still, it would be nice if your
