@@ -450,15 +450,40 @@ cycles, you want to call ``topo_order(g)`` directly, instead of calling
 ``checked_topo_order(g)``. Otherwise your performance will suffer.
 
 *Aside:* In a large application, call stacks can be hundreds or thousands of
-function calls deep. If each function checks the type of ``x`` before passing it
-to the next function, the performance impact can really add up. Now, apply that
-same reasoning to our ``topo_order(g)`` example; you certainly don't want to
-call ``g.has_cycles()`` thousands of times!
+function calls deep. If each function in the call stack checks the type of ``x``
+before passing it to the next function, the performance impact can really add
+up. Now, apply that same reasoning to our ``topo_order(g)`` example; you
+certainly don't want to call ``g.has_cycles()`` thousands of times!
 
 Code coverage
 =============
 
-**UNDER CONSTRUCTION**
+Now it's time to test your new feature. You start by writing unit tests for all
+the functions in your square root library. Then you write unit tests for the
+other functions in your feature: ``dingarang()``, ``hollybar()``, and
+``umbilicate()``.
+
+You run the unit tests and generate a code coverage report. The coverage report
+says you've failed to test one line of the square root library. You open the
+annotated source file to see which line you failed to test.
+
+.. code:: diff
+
+   def sqrt(x):
+
+       """Apply the "fancy square root" algorithm to 'x'.
+
+       Preconditions:
+       - 'x' is a number.
+       - 'x' is greater than or equal to zero.
+       """
+
+       if x < 0.0:
+  -        raise Exception('domain error')
+
+       # Fancy square root code here!
+       # ...
+       return result
 
 *Aside:* Consider this: where is the value-added in our square root library? The
 value-added is in the "fancy square root" algorithm. The special case functions
