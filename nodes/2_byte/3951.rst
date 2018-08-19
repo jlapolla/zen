@@ -455,8 +455,8 @@ before passing it to the next function, the performance impact can really add
 up. Now, apply that same reasoning to our ``topo_order(g)`` example; you
 certainly don't want to call ``g.has_cycles()`` thousands of times!
 
-Code coverage
-=============
+Testing your code
+=================
 
 Now it's time to test your new feature. You start by writing unit tests for all
 the functions in your square root library. Then you write unit tests for the
@@ -537,7 +537,7 @@ You think it's silly to make ``sqrt(-1)`` an officially supported feature, so
 you opt for the second option: you remove the ``sqrt(-1)`` test and leave the
 preconditions of ``sqrt()`` unchanged.
 
-But you still have to code coverage issue.
+But you still have the code coverage issue.
 
 .. code:: diff
 
@@ -557,18 +557,41 @@ But you still have to code coverage issue.
        # ...
        return result
 
-You ponder this for a while. You conclude, "I guess, because of the way I've
-defined the preconditions, checking for ``x`` less than zero and raising an
-exception is actually dead code. And since it's dead code, I should remove it
-entirely. That code will never be executed if the client code is well-formed.
-And if the client code is ill-formed and does something like ``sqrt(-1)``,
-that's unsupported behavior, and it represents a bug in the client code."
+You ponder this for a while. Slowly and carefully, you conclude: "I guess,
+because of the way I've defined the preconditions, checking for ``x`` less than
+zero and raising an exception is actually dead code. And since it's dead code,
+I should remove it entirely. That code will never be executed if the client
+code is well-formed. And if the client code is ill-formed and does something
+like ``sqrt(-1)``, that's unsupported behavior, and it represents a bug in the
+client code."
 
 It doesn't feel right to you. You've been taught all your life that defensive
 programming is a gift from heaven. But you've run into this test coverage /
 feature conundrum now, and you can see no way to solve it but to remove the
 precondition check from ``sqrt()``. You reflect, "I guess I'll remove it, and
 see what happens, but I'm sure Octavius will have something to say about it."
+
+With that, you remove the precondition check from ``sqrt()``
+
+.. code:: diff
+
+   def sqrt(x):
+
+       """Apply the "fancy square root" algorithm to 'x'.
+
+       Preconditions:
+       - 'x' is a number.
+       - 'x' is greater than or equal to zero.
+       """
+
+  -    if x < 0.0:
+  -        raise Exception('domain error')
+  -
+       # Fancy square root code here!
+       # ...
+       return result
+
+You run your tests again, and you get 100% code coverage.
 
 Unused functions
 ++++++++++++++++
@@ -631,8 +654,9 @@ You think "I suppose they are rather silly functions. I mean, these are all
 things that client code could easily do itself. In fact, my other feature
 functions, ``dingarang()``, ``hollybar()``, and ``umbilicate()`` already do
 these things. I guess these special case functions aren't adding any real value
-to the square root library." And with that, you bid your special case functions
-farewell, and remove them and the code that tests them.
+to the square root library, so it should be okay to remove them." And with
+that, you bid your special case functions farewell, and remove them and the
+code that tests them.
 
 *Aside:* Consider this: where is the value-added in our square root library? The
 value-added is in the "fancy square root" algorithm. The special case functions
@@ -649,3 +673,121 @@ convince you, then perhaps the maintainability arguments will. Look how much
 special-case code we were able to remove by restricting the preconditions of
 ``sqrt()`` and letting client code handle special cases itself! Consider how
 many fewer tests we need to write!
+
+Return of Octavius
+==================
+
+"Are you crazy!?" Octavius shouts. "Look at what you did to the square root
+library!" He points furiously to the monitor. The monitor faithfully displays
+the full code your square root library.
+
+.. code:: python
+
+  def sqrt(x):
+
+      """Apply the "fancy square root" algorithm to 'x'.
+
+      Preconditions:
+      - 'x' is a number.
+      - 'x' is greater than or equal to zero.
+      """
+
+      # Fancy square root code here!
+      # ...
+      return result
+
+Octavius raises is voice again: "This square root library is not robust! What
+happened to all the special case code we had!?"
+
+You've prepared yourself for Octavius' reaction. You reply, cool as a cucumber:
+"Well, it turned out we didn't need any of the special cases to implement the
+new feature."
+
+"But what if I need to use your square root library to take the square root of
+a list of numbers?" he insists.
+
+"Well, if you have a list of numbers ``l``, you can do that with ``map(sqrt,
+l)``. I thought that was easy enough to type into your keyboard. Are you unable
+to do that in your code? Or do I need to make a special case function for you?"
+you quip.
+
+Octavius is visibly annoyed. He contains himself. Slowly, he gathers his
+composure. At length he sighs. "You have a point" he says in a level tone.
+"Okay, okay, fine. You can get rid of the special case functions. But I have one
+last gripe: what happens if I call ``sqrt(-1)``?" he asks.
+
+"Then you've violated the preconditions of ``sqrt()``. That's unsupported
+behavior, and you need to fix your code to call ``sqrt()`` properly" you reply.
+
+Octavius comes back with "Okay, I know I'm not **SUPPOSED** to do it. But what
+happens if I **DO** do it?"
+
+"I'm not sure" you reply. "I consider that case to be outside of the
+specification of ``sqrt()``, so I didn't specify what would happen in that case.
+Let's try it and find out what happens." In a new terminal, you enter ``python``
+to start an interactive Python session. You import your square root library and
+call ``sqrt(-1)``. The code hangs for a second. The code hangs for ten seconds.
+Actually, the code is still hanging. You hit ``Ctrl`` + ``C`` to interrupt it.
+The backtrace shows that ``sqrt()`` was stuck in one of its inner loops within
+the "fancy square root" algorithm.
+
+"Looks like it loops forever" you say.
+
+"And you find that behavior acceptable!?" cries Octavius.
+
+"Well, what did you expect ``sqrt(-1)`` to do?" you ask.
+
+Octavius replies "I expected it to at least raise an exception!"
+
+"Well I ..." you stop mid-sentence. Is it really okay to loop forever when your
+preconditions are violated? You ponder this in a minute of silence. Octavius
+waits patiently. At last, you have a revalation. In a stroke of genius, you
+reply.
+
+"What makes you think you have the right to violate the preconditions of
+``sqrt()`` and expect any kind of well-defined behavior? By stating the
+preconditions, I am explicitly saying that if you violate the preconditions of
+``sqrt()`` the behavior is unspecified. That means that if you violate the
+preconditions of ``sqrt()``, all bets are off, and ``sqrt()`` is within its
+right to loop forever, return wrong answers, erase global variables; I don't
+know, anything could happen! And you know what, if that happens, it will be
+**YOUR FAULT** for violating the preconditions!"
+
+Octavius digests this. "I never thought of it that way" he says. "Nevertheless,
+it's possible that one of our developers will accidentally write code that
+violates the preconditions. I mean, what happens if I am working on a feature
+that uses your square root library, and I violate your preconditions? What then?"
+
+"Well, assuming that you test your feature, your tests will hang in the infinite
+loop, and you'll hit ``Ctrl`` + ``C`` to interrupt the test, get the backtrace,
+and debug the problem from there" you reply. Then you add "Regardless of what
+happens when you violate my preconditions, if you do your part and test your
+feature thoroughly, you will notice that something is wrong during testing, and
+you fix your code to call ``sqrt()`` properly. Therefore, such a precondition
+violation will never make it into production code as long as you test your
+feature properly."
+
+"Basically, what you're saying is we should rely on tests to catch these cases.
+I suppose that's true" says Octavius. "Still, it would be nice if your
+``sqrt()`` function could help me debug **MY** feature by raising a descriptive
+exception when I've violated your preconditions."
+
+You agree that that would be cool. "I'll see if that's possible, without
+introducing the test coverage / feature conundrum again" you say.
+
+The design review goes on, and everyone is happy with your new feature. They
+particularly like the ``umbilicate()`` function.
+
+Assertions
+==========
+
+Your mind wanders throughout the rest of the design review, as other developers
+present their latest and greatest code. You're still noodling over Octavius'
+suggestion: "It would be nice if your ``sqrt()`` function could help me debug
+**MY** feature by raising a descriptive exception when I've violated your
+preconditions." You dig deep back into your software knowledge. "I swear, I
+remember there was a way to do this" you think to yourself.
+
+Assertions. **ASSERTIONS!!** That's the answer! Assertions!
+
+**UNDER CONSTRUCTION**
