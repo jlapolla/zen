@@ -384,11 +384,11 @@ Using your code
 ===============
 
 With ``sqrt()`` and friends out of the way, you start writing functions that use
-your new square root library. You start on the ``floopteedoo()`` function.
+your new square root library. You start on the ``dingarang()`` function.
 
 .. code:: python
 
-  def floopteedoo(x):
+  def dingarang(x):
       if not (isinstance(x, int)):
           raise Exception('not an int')
       result = []
@@ -406,7 +406,7 @@ change it to call ``sqrt_int()`` directly, instead of calling
 
 .. code:: python
 
-  def floopteedoo(x):
+  def dingarang(x):
       if not (isinstance(x, int)):
           raise Exception('not an int')
       result = []
@@ -424,7 +424,7 @@ of calling ``sqrt_int()``.
 
 .. code:: python
 
-  def floopteedoo(x):
+  def dingarang(x):
       if not (isinstance(x, int)):
           raise Exception('not an int')
       result = []
@@ -434,8 +434,8 @@ of calling ``sqrt_int()``.
       return result
 
 You continue with writing your the other functions you need to implement your
-new feature: ``dingarang()``, ``hollybar()``, and ``umbilicate()``. Each of
-these functions uses some features from your new square root library.
+new feature: ``hollybar()`` and ``umbilicate()``. Each of these functions uses
+some features from your new square root library.
 
 *Aside:* In this case, the performance benefit from calling ``sqrt()`` directly
 is negligible because the checks that ``checked_sqrt()`` performs are fast.
