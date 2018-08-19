@@ -463,6 +463,9 @@ the functions in your square root library. Then you write unit tests for the
 other functions in your feature: ``dingarang()``, ``hollybar()``, and
 ``umbilicate()``.
 
+The test coverage / feature conundrum
++++++++++++++++++++++++++++++++++++++
+
 You run the unit tests and generate a code coverage report. The coverage report
 says you've failed to test one line of the square root library. You open the
 annotated source file to see which line you failed to test.
@@ -484,6 +487,175 @@ annotated source file to see which line you failed to test.
        # Fancy square root code here!
        # ...
        return result
+
+Hmm, you forgot to test that "domain error" is raised when you pass a negative
+number to ``sqrt()``. You sit down to write a test for this.
+
+.. code:: python
+
+  import pytest
+
+  def test_negative_sqrt():
+      with pytest.raises(Exception):
+          sqrt(-1)
+
+
+That ought to do it. But, wait a minute. The preconditions of ``sqrt()`` say
+that ``x`` must be greater than or equal to zero. So, your test function is
+violating the preconditions by calling ``sqrt(-1)``, and you know that calling
+code must respect the preconditions of a called function. At the same time, you
+know that the only way to test that the "domain error" exception is raised is to
+violate the preconditions of ``sqrt()``. Is it proper to violate this
+precondition in test code, in order to check the behavior when the precondition
+is violated?
+
+You ponder this for a moment. Well, you typically want tests for all of your
+supported features. This includes the behavior of functions under all supported
+conditions. But what about unsupported conditions? You know that violating the
+precondition of ``sqrt()`` is by definition not a supported condition. In
+general, should we test unsupported conditions?
+
+You recall the definition of a test: a test is an executable specification. You
+repeat this to yourself again: **"A test is a specification."**
+
+Suddenly it hits you: by testing ``sqrt(-1)`` and expecting it to raise "domain
+error", you're making the claim that this is an officially supported feature of
+the ``sqrt()`` function. In other words, if you test ``sqrt(-1)`` and expect it
+to raise "domain error", then that is equivalent to adding this behavior to the
+publicly documented specification of ``sqrt()``. This means that you must
+maintain the feature for backwards compatibility. In fact, this means that
+client code can **RELY** on the feature being supported for the forseeable
+future.
+
+Now you have two options before you:
+
+- Alter the preconditions of ``sqrt()`` to make ``sqrt(-1)`` a valid call, with
+  a well-defined behavior and supporting tests.
+- Remove the test for ``sqrt(-1)``.
+
+You think it's silly to make ``sqrt(-1)`` an officially supported feature, so
+you opt for the second option: you remove the ``sqrt(-1)`` test and leave the
+preconditions of ``sqrt()`` unchanged.
+
+But you still have to code coverage issue.
+
+.. code:: diff
+
+   def sqrt(x):
+
+       """Apply the "fancy square root" algorithm to 'x'.
+
+       Preconditions:
+       - 'x' is a number.
+       - 'x' is greater than or equal to zero.
+       """
+
+       if x < 0.0:
+  -        raise Exception('domain error')
+
+       # Fancy square root code here!
+       # ...
+       return result
+
+You ponder this for a while. You conclude, "I guess, because of the way I've
+defined the preconditions, checking for ``x`` less than zero and raising an
+exception is actually dead code. And since it's dead code, I should remove it
+entirely. That code will never be executed if the client code is well-formed.
+And if the client code is ill-formed and does something like ``sqrt(-1)``,
+that's unsupported behavior, and it represents a bug in the client code."
+
+It doesn't feel right to you. You've been taught all your life that defensive
+programming is a gift from heaven. But you've run into this test coverage /
+feature conundrum now, and you can see no way to solve it but to remove the
+precondition check from ``sqrt()``. You reflect, "I guess I'll remove it, and
+see what happens, but I'm sure Octavius will have something to say about it."
+
+Unused functions
+++++++++++++++++
+
+With the ``sqrt()`` code coverage issue resolved, you look over the code
+coverage report once more. This time, you focus on the coverage for your special
+case square root functions (i.e. ``check_sqrt()``, ``sqrt_list()``,
+``sqrt_str()``, ``sqrt_int()``, and ``sqrt_float()``). You notice that each of
+your special case functions is called only once. In fact, the special case
+functions are only called from the test code. Your actual feature functions
+(i.e. ``dingarang()``, ``hollybar()``, and ``umbilicate()``) never call the
+special case functions; they only call ``sqrt()``. Why is that? Because by the
+time they need to take the square root of a variable, they have already verified
+that the variable is a positive number.
+
+"So, it looks like I don't actually need these special case functions," you
+reflect. But that's good code; why remove it? Well, if you remove those
+functions, then you can also remove the tests for those functions, and that
+actually removes a substantial amount of code. It makes your square root library
+short, sweet, and to the point.
+
+You are loathe to remove your special case functions that you worked so hard to
+write and test. You take one last look at them.
+
+.. code:: python
+
+  def checked_sqrt(x):
+
+      if isinstance(x, list):
+          return sqrt_list(x)
+
+      if isinstance(x, str):
+          return sqrt_str(x)
+
+      if isinstance(x, int):
+          return sqrt_int(x)
+
+      if isinstance(x, float):
+          return sqrt_float(x)
+
+      raise Exception('unhandled type')
+
+  def sqrt_list(x):
+      return map(checked_sqrt, x)
+
+  def sqrt_str(x):
+      return sqrt_float(float(x))
+
+  def sqrt_int(x):
+      if x < 0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+  def sqrt_float(x):
+      if x < 0.0:
+          raise Exception('domain error')
+      return sqrt(x)
+
+You think "I suppose they are rather silly functions. I mean, these are all
+things that client code could easily do itself. And, in fact, my other feature
+functions, ``dingarang()``, ``hollybar()``, and ``umbilicate()`` already do
+these things. I guess these special case functions aren't adding any real value
+to the square root library." And with that, you bid your special case functions
+farewell, and remove them and the code that tests them.
+
+
+
+Well, it's impossible to test all unsupported conditions, because there are an
+infinite number of unsupported conditions. For example, we don't test the
+behavior of ``sqrt()`` when the meanings of the standard Python math functions
+have been altered. We also don't test the behavior of ``sqrt()`` when the system
+is about to run out of memory. There are lots of unsupported conditions we don't
+test; the list goes on forever.
+
+Very well, we cannot test all unsupported conditions. But does that mean we are
+prohibited from testing this particular unsupported condition? Is it wrong to
+test ``sqrt(-1)``? Well, when we decide to test a feature, what does that imply
+about the feature?
+
+You ponder this for much longer than a moment. After much deliberation, you come
+to this conclusion: when you test a feature, you are making the claim that the
+feature is an officially supported feature. This means that you must maintain
+the feature for backwards compatibility. In fact, this means that client code
+can **RELY** on the feature being supported for the forseeable future. Testing
+``sqrt(-1)`` means that client code is explicitly allowed to call ``sqrt(-1)``
+just like the test does, and client code can rely on it raising a "domain error"
+exception just like the test specifies.
 
 *Aside:* Consider this: where is the value-added in our square root library? The
 value-added is in the "fancy square root" algorithm. The special case functions
