@@ -1,0 +1,32 @@
+===============================
+The illusion of post-conditions
+===============================
+
+**UNDER CONSTRUCTION**
+
+Synopsis
+========
+
+Consider the effects of a function call as taking the computing machine from one
+state to another state.
+
+Post-conditions make assertions about the final state of the computing machine.
+
+But they don't fully describe the final state of the computing machine.
+
+So you don't know, for instance, if the function that you just called also
+modified some global variables that you are depending on.
+
+We could restrict the post-conditions to the point where they fully define the
+state of the computing machine.
+
+This, however, restricts us to a single implementation of our function.
+
+In fact, the statement of the post-condition IS the implementation of our
+function, so there's no need to specify post-conditions in this case, since the
+code itself is an expression of the post-conditions (see specification / code
+equivalence).
+
+In order to have a function that insulates the caller from its implementation
+details, you MUST have post-conditions that allow for multiple possible states
+of the computing machine.
