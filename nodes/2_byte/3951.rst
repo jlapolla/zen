@@ -628,34 +628,11 @@ write and test. You take one last look at them.
       return sqrt(x)
 
 You think "I suppose they are rather silly functions. I mean, these are all
-things that client code could easily do itself. And, in fact, my other feature
+things that client code could easily do itself. In fact, my other feature
 functions, ``dingarang()``, ``hollybar()``, and ``umbilicate()`` already do
 these things. I guess these special case functions aren't adding any real value
 to the square root library." And with that, you bid your special case functions
 farewell, and remove them and the code that tests them.
-
-
-
-Well, it's impossible to test all unsupported conditions, because there are an
-infinite number of unsupported conditions. For example, we don't test the
-behavior of ``sqrt()`` when the meanings of the standard Python math functions
-have been altered. We also don't test the behavior of ``sqrt()`` when the system
-is about to run out of memory. There are lots of unsupported conditions we don't
-test; the list goes on forever.
-
-Very well, we cannot test all unsupported conditions. But does that mean we are
-prohibited from testing this particular unsupported condition? Is it wrong to
-test ``sqrt(-1)``? Well, when we decide to test a feature, what does that imply
-about the feature?
-
-You ponder this for much longer than a moment. After much deliberation, you come
-to this conclusion: when you test a feature, you are making the claim that the
-feature is an officially supported feature. This means that you must maintain
-the feature for backwards compatibility. In fact, this means that client code
-can **RELY** on the feature being supported for the forseeable future. Testing
-``sqrt(-1)`` means that client code is explicitly allowed to call ``sqrt(-1)``
-just like the test does, and client code can rely on it raising a "domain error"
-exception just like the test specifies.
 
 *Aside:* Consider this: where is the value-added in our square root library? The
 value-added is in the "fancy square root" algorithm. The special case functions
@@ -665,9 +642,10 @@ code can easily check and do itself. In fact, in most cases, the client code is
 already performing these checks itself. Is it worth your time to write these
 special-case functions? The client code could easily do without them. Why not
 spend more time on your actual value added: spend time improving the "fancy
-square root" algorithm. Or move on to implement another needed feature!
+square root" algorithm! Or move on to implement another needed feature!
 
 *Aside:* If the performance arguments against defensive programming don't
 convince you, then perhaps the maintainability arguments will. Look how much
 special-case code we were able to remove by restricting the preconditions of
-``sqrt()``! Consider how many fewer tests we need to write!
+``sqrt()`` and letting client code handle special cases itself! Consider how
+many fewer tests we need to write!
